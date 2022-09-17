@@ -6,7 +6,7 @@ import androidx.tv.material.samples.data.sampleShows
 
 fun getImage(imageId: Int? = null): Int {
     if (imageId != null) {
-        // TODO: return correct image
+        return imageId
     }
     return getRandomImage()
 }
@@ -14,6 +14,12 @@ fun getImage(imageId: Int? = null): Int {
 fun getRandomImage(): Int {
     return sampleImages.shuffled()[0]
 }
+
+fun getShowsByIds(ids: List<String>): List<Show> = ids
+    .filter { id -> id in sampleShows.map { show -> show.id } }
+    .map { id ->
+        sampleShows.find { show -> show.id == id }!!
+    }
 
 fun getRandomShows(count: Int = 3): List<Show> {
     if (count >= sampleShows.size) {

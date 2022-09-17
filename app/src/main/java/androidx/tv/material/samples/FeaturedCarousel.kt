@@ -4,8 +4,8 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -24,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
@@ -38,13 +37,24 @@ import androidx.tv.material.ExperimentalTvMaterialApi
 import androidx.tv.material.carousel.Carousel
 import androidx.tv.material.carousel.CarouselItem
 import androidx.tv.material.samples.data.Show
-import androidx.tv.material.samples.utils.getRandomImage
-import androidx.tv.material.samples.utils.getRandomShows
+import androidx.tv.material.samples.utils.getImage
+import androidx.tv.material.samples.utils.getShowsByIds
 
 @OptIn(ExperimentalTvMaterialApi::class)
 @Composable
 fun FeaturedCarousel(modifier: Modifier = Modifier) {
-    val shows = remember { getRandomShows() }
+    val shows = remember { getShowsByIds(listOf(
+        "thor-love-and-thunder",
+        "student-of-the-year",
+        "war",
+        "khuda-haafiz-chapter-2-agni-pariksha",
+        "simmba",
+        "shivaay",
+//        "chak-de-india",
+        "zindagi-na-milegi-dobara",
+        "kedarnath",
+        "hasee-toh-phasee",
+    )) }
 
     Carousel(
         slideCount = shows.size,
@@ -67,16 +77,20 @@ fun FeaturedCarouselItem(
 
     CarouselItem(
         background = {},
-        modifier = modifier.height(itemHeight.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(itemHeight.dp),
         overlayEnterTransitionStartDelayMillis = 0,
         overlayExitTransition = slideOutHorizontally { -it / 2 }
     ) {
         Image(
-            painter = painterResource(id = remember { getRandomImage() }),
+            painter = painterResource(id = remember { getImage(show.heroImageResource) }),
             contentDescription = null,
-            contentScale = ContentScale.FillWidth,
+            contentScale = ContentScale.FillBounds,
             alpha = 0.6f,
-            modifier = Modifier.fillMaxHeight(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
         )
         Column(
             modifier = Modifier.padding(start = 50.dp, end = 50.dp, top = topPadding.dp),
@@ -101,7 +115,11 @@ fun FeaturedCarouselItem(
             Row(
                 modifier = Modifier
                     .padding(top = 20.dp)
-                    .border(width = 2.dp, color = buttonOutlineColor, shape = RoundedCornerShape(50.dp)),
+                    .border(
+                        width = 2.dp,
+                        color = buttonOutlineColor,
+                        shape = RoundedCornerShape(50.dp)
+                    ),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -114,6 +132,7 @@ fun FeaturedCarouselItem(
                     ),
                     modifier = Modifier
                         .onFocusChanged { isButtonFocussed = it.isFocused }
+                        .focusable()
                         .padding(vertical = 2.dp, horizontal = 5.dp)
                 ) {
                     Text(

@@ -79,7 +79,7 @@ fun Card(show: Show) {
             .focusable()
     ) {
         Image(
-            painter = painterResource(id = remember { getImage() }),
+            painter = painterResource(id = remember { getImage(show.heroImageResource) }),
             contentDescription = null,
             contentScale = ContentScale.FillWidth,
             alpha = 0.6f,
